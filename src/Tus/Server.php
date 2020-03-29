@@ -324,7 +324,9 @@ class Server extends AbstractTus
         if ( ! $fileMeta = $this->cache->get($key)) {
             return $this->response->send(null, HttpResponse::HTTP_NOT_FOUND);
         }
-
+        if (! $fileMeta || ! isset($fileMeta['file_path']) || ! file_exists($fileMeta['file_path'])) {
+            return $this->response->send(null, HttpResponse::HTTP_NOT_FOUND);
+        }
         $offset = $fileMeta['offset'] ?? false;
 
         if (false === $offset) {
